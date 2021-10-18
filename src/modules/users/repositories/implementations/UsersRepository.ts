@@ -1,42 +1,59 @@
-import { User } from "../../model/User";
-import { IUsersRepository, ICreateUserDTO } from "../IUsersRepository";
+import { User } from '../../model/User';
+import { IUsersRepository, ICreateUserDTO } from '../IUsersRepository';
 
 class UsersRepository implements IUsersRepository {
-  private users: User[];
+    private users: User[];
 
-  private static INSTANCE: UsersRepository;
+    private static INSTANCE: UsersRepository;
 
-  private constructor() {
-    this.users = [];
-  }
-
-  public static getInstance(): UsersRepository {
-    if (!UsersRepository.INSTANCE) {
-      UsersRepository.INSTANCE = new UsersRepository();
+    private constructor() {
+        this.users = [];
     }
 
-    return UsersRepository.INSTANCE;
-  }
+    public static getInstance(): UsersRepository {
+        if (!UsersRepository.INSTANCE) {
+            UsersRepository.INSTANCE = new UsersRepository();
+        }
 
-  create({ name, email }: ICreateUserDTO): User {
-    // Complete aqui
-  }
+        return UsersRepository.INSTANCE;
+    }
 
-  findById(id: string): User | undefined {
-    // Complete aqui
-  }
+    create({ name, email }: ICreateUserDTO): User {
+        const user: User = new User();
+        Object.assign(user, {
+            name,
+            email,
+            created_at: new Date(),
+            updated_at: new Date(),
+        });
 
-  findByEmail(email: string): User | undefined {
-    // Complete aqui
-  }
+        this.users.push(user);
+        return user;
+    }
 
-  turnAdmin(receivedUser: User): User {
-    // Complete aqui
-  }
+    findById(id: string): User | undefined {
+        const user = this.users.find((user) => user.id === id);
 
-  list(): User[] {
-    // Complete aqui
-  }
+        return user;
+    }
+
+    findByEmail(email: string): User | undefined {
+        const user: User = this.users.find((user) => user.email === email);
+
+        return user;
+    }
+
+    turnAdmin(receivedUser: User): User {
+        const updatedUser = this.findById(receivedUser.id);
+        updatedUser.admin = true;
+        updatedUser.updated_at = new Date();
+
+        return updatedUser;
+    }
+
+    list(): User[] {
+        return this.users;
+    }
 }
 
 export { UsersRepository };
