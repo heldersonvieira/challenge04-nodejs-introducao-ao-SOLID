@@ -1,0 +1,258 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Chapter 02 - Challenge 02",
+        "description": "Documentação do desafio 02 - Ignite",
+        "version": "1.0.0",
+        "contact": "vieirahelder.fort@gmail.com"
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["users"],
+                "summary": "Criar um novo usuário",
+                "description": "Criar um novo usuário",
+                "requestBody": {
+                    "required": true,
+                    "description": "Campos obirgatórios para criação do usuário",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": { "type": "string" },
+                                    "description": { "type": "string" }
+                                },
+                                "example": {
+                                    "name": "Helderson",
+                                    "description": "vieirahelder.fort@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                         "description": "Operação realizada com sucesso.",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": { "type": "boolean" },
+                                        "id": { "type": "string" },
+                                        "name": { "type": "string" },
+                                        "email": { "type": "string" },
+                                        "created_at": { "type": "string" },
+                                        "updated_at": { "type": "string" }
+                                    },
+                                    "example": {
+                                        "admin": false,
+                                        "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                        "name": "helderson",
+                                        "email": "vieirahelder.fort@gmail.com",
+                                        "created_at": "2021-03-10t22:10:32.9922",
+                                        "updated_at": "2021-03-10t22:10:32.9922"
+                                    }
+
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email já esta sendo utilizado.",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": { "type": "string" }
+                                    },
+                                    "example": {
+                                        "error": "This email is already in use"
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["users"],
+                "summary": "Retorna todos os usuarios",
+                "description": "Somente usuário ``` admin ``` pode acessar.",
+                "parameters": [{
+                    "in": "header",
+                    "name": "user_id",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso.",
+                        "content": {
+                           "application/json": {
+                               "schema": {
+                                   "type": "object",
+                                   "properties": {
+                                       "admin": { "type": "boolean" },
+                                       "id": "string",
+                                       "name": { "type": "string" },
+                                       "email": { "type": "string" },
+                                       "created_at": { "type": "string" },
+                                       "updated_at": { "type": "string" }
+                                   },
+                                   "example": {
+                                       "admin": false,
+                                       "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                       "name": "helderson",
+                                       "email": "vieirahelder.fort@gmail.com",
+                                       "created_at": "2021-03-10t22:10:32.9922",
+                                       "updated_at": "2021-03-10t22:10:32.9922"
+                                   }
+
+                               }
+                           }
+                       }
+                    },
+                    "400": {
+                        "description": "Usuário sem permissão ou Usuário não encontrado.",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": { "type": "string" }
+                                    },
+                                    "example": {
+                                        "error": "You need to be an administrator to list all users"
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "summary": "Retorna um usuário específico",
+                "tags": ["users"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso.",
+                        "content": {
+                           "application/json": {
+                               "schema": {
+                                   "type": "object",
+                                   "properties": {
+                                       "admin": { "type": "boolean" },
+                                       "id": "string",
+                                       "name": { "type": "string" },
+                                       "email": { "type": "string" },
+                                       "created_at": { "type": "string" },
+                                       "updated_at": { "type": "string" }
+                                   },
+                                   "example": {
+                                       "admin": false,
+                                       "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                       "name": "helderson",
+                                       "email": "vieirahelder.fort@gmail.com",
+                                       "created_at": "2021-03-10t22:10:32.9922",
+                                       "updated_at": "2021-03-10t22:10:32.9922"
+                                   }
+
+                               }
+                           }
+                       }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado.",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": { "type": "string" }
+                                    },
+                                    "example": {
+                                        "error": "User not found"
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "summary": "Torna um usuário administrador",
+                "tags": ["users"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso.",
+                        "content": {
+                           "application/json": {
+                               "schema": {
+                                   "type": "object",
+                                   "properties": {
+                                       "admin": { "type": "boolean" },
+                                       "id": "string",
+                                       "name": { "type": "string" },
+                                       "email": { "type": "string" },
+                                       "created_at": { "type": "string" },
+                                       "updated_at": { "type": "string" }
+                                   },
+                                   "example": {
+                                       "admin": false,
+                                       "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                       "name": "helderson",
+                                       "email": "vieirahelder.fort@gmail.com",
+                                       "created_at": "2021-03-10t22:10:32.9922",
+                                       "updated_at": "2021-03-10t22:10:32.9922"
+                                   }
+    
+                               }
+                           }
+                       }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado.",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": { "type": "string" }
+                                    },
+                                    "example": {
+                                        "error": "User not found"
+                                    }
+    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
